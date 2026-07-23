@@ -59,18 +59,22 @@ if [ $? -ne 0 ]; then
    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE &>>$LOG_FILE
    VALIDATE $? "Adding a USER"
 else
-   echo "user roboshop already exists so .. $Y skipping $N" &>>$LOG_FILE
+   echo -e "user roboshop already exists so .. $Y skipping $N" 
 fi
 
 
 mkdir -p /app &>>$LOG_FILE
-VALIDATE $? "create a /app directory"
+VALIDATE $? "create an /app directory"
 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
 VALIDATE $? "Download the DEV written code"
 
 cd /app &>>$LOG_FILE
 VALIDATE $? "Moving towards /app"
+
+#here the execution is struck because when we run the script for the 1st time it executed well, but for 2nd time when we execute it is asking that whether i should remove the previous code and put the new code or stick with the previous code ? - here human intervention is needed. There might be code change so we need to replace the code. what we can do safely is - remove the previous code and put the new code
+rm -rf /app/*
+VALIDATE $? "Removing the existing code"
 
 unzip /tmp/catalogue.zip &>>$LOG_FILE
 VALIDATE $? "Un-Zip the code in /app directory"
