@@ -54,12 +54,12 @@ VALIDATE $? "Install nodejs"
 
 #Idempotent--> dosen't matter how manyn no.of times we runs a script , it should provide the same output. 
 #here if user already exists then it will throw an error saying user already exists, hence to avoid the error we are checking whether user alredy exists or not
-id roboshop
+id roboshop &>>$LOG_FILE
 if [ $? -ne 0 ]; then
-   useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
+   useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE &>>$LOG_FILE
    VALIDATE $? "Adding a USER"
 else
-   echo "user roboshop already exists so .. $Y skipping $N"
+   echo "user roboshop already exists so .. $Y skipping $N" &>>$LOG_FILE
 fi
 
 
