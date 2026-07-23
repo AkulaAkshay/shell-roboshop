@@ -11,6 +11,7 @@ N="\e[37m" #or 0m
 
 LOGS_FOLDER="/var/log/shell-roboshop"
 SCRIPT_NAME=$( echo $0 | cut -d "." -f1 )
+SCRIPT_DIR=$PWD
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log" #full path - /var/log/shell-script/16-logs.log
 MONGODB_HOST=mongodb.akshaysunny.space
 
@@ -51,8 +52,16 @@ VALIDATE $? "Enable nodejs-20 version"
 dnf install nodejs -y &>>$LOG_FILE
 VALIDATE $? "Install nodejs"
 
-useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
-VALIDATE $? "Adding a USER"
+#Idempotent--> dosen't matter how manyn no.of times we runs a script , it should provide the same output. 
+#here if user already exists then it will throw an error saying user already exists, hence to avoid the error we are checking whether user alredy exists or not
+id roboshop
+if [ $? -ne 0 ]; then
+   useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$LOG_FILE
+   VALIDATE $? "Adding a USER"
+else
+   echo "user roboshop already exists so .. $Y skipping $N"
+fi
+
 
 mkdir /app &>>$LOG_FILE
 VALIDATE $? "create a /app directory"
@@ -72,7 +81,8 @@ VALIDATE $? "Moving towards /app"
 npm install &>>$LOG_FILE
 VALIDATE $? "Install dependencies"
 
-cp catalogue.service /etc/systemd/system/catalogue.service &>>$LOG_FILE
+cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service &>>$LOG_FILE # its better to give full path while copying 
+#because we dont know where we are present right now, hence when we provide full path then we don't face any issues.
 VALIDATE $? "copy systemctl service"
 
 systemctl daemon-reload &>>$LOG_FILE
@@ -84,7 +94,7 @@ VALIDATE $? "Enable catalogue"
 systemctl start catalogue &>>$LOG_FILE
 VALIDATE $? "Start catalogue"
 
-cp mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOG_FILE
+cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOG_FILE 
 VALIDATE $? "copy mongo repo"
 
 
