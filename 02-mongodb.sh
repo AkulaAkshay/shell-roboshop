@@ -35,21 +35,6 @@ VALIDATE(){
 }
 
 
-# $@ or $* - to display all the arguments
-
-for package in $*
-do
-   # check whether that particular package is installed or not?
-   dnf list installed $package &>>$LOG_FILE
-
-   # check the exit status : if exit status is 0 - already installed; -ne 0 then not installed -> we need to install it 
-   if [ $? -ne 0 ]; then
-      dnf install $package -y &>>$LOG_FILE
-      VALIDATE $? "$package" 
-    else
-      echo -e "$package is already installed .. so $Y SKIPPING $N"   
-    fi
-done
 
 
 cp mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOG_FILE
@@ -63,4 +48,10 @@ VALIDATE $? "Enable mongodb"
 
 systemctl start mongod &>>$LOG_FILE
 VALIDATE $? "start mongodb"
+
+sed -i "s/127.0.0.1/0.0.0.0/g" /etc/mongo.conf
+VALIDATE $? "allowing remote connections to mongodb"
+
+systemctl restart mongod
+VALIDATE $? "restart mongod"
 
