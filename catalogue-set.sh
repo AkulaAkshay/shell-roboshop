@@ -99,3 +99,7 @@ else
 fi
 
 systemctl restart catalogue &>>$LOG_FILE
+
+#what is right to choose bw validate and set? - some might choose set bc they can reduce the no.of line and no unnecessary info to users. some might choose validate bc user can know what is happening, how the flow is going on,..
+#NOTE: Firstly while developing the scripts we need to keep the VALIDATE fn bc de-bugging is easy, once if u r confident that script is stable then you can use trap.
+#if necessary we can write the echo statements when ever necessary like (for 45-51 we can say that installing nodejs ie., after 51th line on 52nd line we can write an statement -> echo -e "Installing NodeJS 20 ... $G SUCCESS $N", for  85th we can write a statement -> echo -e "Catalogue application setup ... $G SUCCESS $N" ,  for 102th line e can write an statement -> echo -e "Loading products and restarting catalogue ... $G SUCCESS $N", ..) 
