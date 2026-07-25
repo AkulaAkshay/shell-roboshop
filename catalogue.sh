@@ -62,7 +62,7 @@ else
    echo -e "user roboshop already exists so .. $Y skipping $N" 
 fi
 
-
+#Inorder to make the script idempotent - we should check if "/app" directory is already present or not
 mkdir -p /app &>>$LOG_FILE
 VALIDATE $? "create an /app directory"
 
@@ -101,11 +101,19 @@ VALIDATE $? "Start catalogue"
 cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOG_FILE 
 VALIDATE $? "copy mongo repo"
 
-
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "Install mongodb client" #inorder to connect to mongodb server
 
-mongosh --host $MONGODB_HOST </app/db/master-data.js &>>$LOG_FILE
+#Inorder to make the script idempotent - we should check if catalogue "products" are already present in the database or not
+# negative number i.e., <0 means "products" are not present in the db; positive number i.e., >0 means "products" are already present in the db; 
+#mongosh --host $MONGODB_HOST </app/db/master-data.js &>>$LOG_FILE
+INDEX=$(mongosh mongodb.daws86s.fun --quiet --eval "db.getMongo().getDBNames().indexOf('catalogue')")
+if [ $INDEX -le 0 ]; then
+    mongosh --host $MONGODB_HOST </app/db/master-data.js &>>$LOG_FILE
+    VALIDATE $? "Load catalogue products"
+else
+    echo -e "Catalogue products already loaded ... $Y SKIPPING $N"
+fi
 VALIDATE $? "Load catalogue products"
 
 systemctl restart catalogue &>>$LOG_FILE
