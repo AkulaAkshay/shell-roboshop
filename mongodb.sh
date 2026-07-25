@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#we are installing 3 packages - mongodb, ngix, python3
+
 
 USERID=$(id -u)
 
