@@ -108,5 +108,6 @@ VALIDATE $? "Install mongodb client" #inorder to connect to mongodb server
 mongosh --host $MONGODB_HOST </app/db/master-data.js &>>$LOG_FILE
 VALIDATE $? "Load catalogue products"
 
-
+systemctl restart catalogue &>>$LOG_FILE
+VALIDATE $? "restart catalogue"
 
