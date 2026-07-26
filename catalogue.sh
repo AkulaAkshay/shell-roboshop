@@ -1,7 +1,5 @@
 #!/bin/bash
 
-#we are installing 3 packages - mongodb, ngix, python3
-
 USERID=$(id -u)
 
 R="\e[31m"
@@ -35,8 +33,6 @@ VALIDATE(){
     fi
 
 }
-
-
 
 
 
@@ -118,4 +114,6 @@ VALIDATE $? "Load catalogue products"
 
 systemctl restart catalogue &>>$LOG_FILE
 VALIDATE $? "restart catalogue"
+
+
 
