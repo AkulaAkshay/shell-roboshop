@@ -10,7 +10,7 @@ N="\e[37m" #or 0m
 LOGS_FOLDER="/var/log/shell-roboshop"
 SCRIPT_NAME=$( echo $0 | cut -d "." -f1 )
 SCRIPT_DIR=$PWD
-LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log" #full path - /var/log/shell-script/16-logs.log
+LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log" #full path - /var/log/shell-script/shipping.log
 MONGODB_HOST=mongodb.akshaysunny.space
 MYSQL_HOST=mysql.akshaysunny.space
 

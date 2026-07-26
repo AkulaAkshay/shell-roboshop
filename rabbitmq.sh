@@ -9,7 +9,7 @@ N="\e[37m" #or 0m
 
 LOGS_FOLDER="/var/log/shell-roboshop"
 SCRIPT_NAME=$( echo $0 | cut -d "." -f1 )
-LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log" #full path - /var/log/shell-script/16-logs.log
+LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log" #full path - /var/log/shell-script/rabbitmq.log
 SCRIPT_DIR=$PWD
 
 START_TIME=$(date +%s)
